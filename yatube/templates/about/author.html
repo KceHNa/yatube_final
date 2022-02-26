@@ -1,0 +1,91 @@
+<!-- templates/about/author.html -->
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Об авторе проекта{% endblock %}
+{% block content %}
+  <h1>Привет, я Ксения!</h1>
+  <div class="card mb-3" style="max-width: 1000px;">
+    <div class="row no-gutters">
+      <div class="col-md-4">
+        <img src="{% static 'img/foto_kcehna.jpeg' %}"
+             class="card-img"
+             alt="Responsive image">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body">
+          <h5 class="card-title">Немного обо мне</h5>
+          <p class="card-text">
+            <p>
+              Это мой сайт, созданный совместно с Яндекс.Практикум.
+            </p>
+            <p>
+              Находясь долгое время в IT, знаю много всего по-маленьку.
+              <br>
+              Качаю скил вместе с этими рябятами и с моими маленькими дочками,
+              чтобы при выходе на работу восстановиться в ИТ и прийдти с новым скилом.
+            </p>
+            <p>
+              Я не системный администратор linux и уж точно не программист!)
+              <br>
+              Я - инеженер!
+            </p>
+            Обожаю автоматизировать, создавать новое из данного,
+            как в конструкторе лего, и решать технические задачи.
+          </p>
+          <p>
+            <a class="btn btn-secondary"
+               href="https://www.instagram.com/aikimum/"
+               role="button"
+               target="_blank">
+              Instagram &raquo;
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h2>HH.ru</h2>
+        <p>
+          Активного поиска работы не веду, но всё возможно
+        </p>
+        <p>
+          <a class="btn btn-lg btn-primary"
+             href="https://hh.ru/resume/5407c84eff011341d70039ed1f6c7a38553841"
+             role="button"
+             target="_blank">
+            Резюме здесь &raquo;
+          </a>
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h2>GitHub</h2>
+        <p>
+          Скоро здесь будет больше открытых проектов
+        </p>
+        <p>
+          <a class="btn btn-lg btn-primary"
+             href="https://github.com/KceHNa"
+             role="button"
+             target="_blank">Код здесь &raquo;</a>
+        </p>
+      </div>
+      <div class="col-md-4">
+        <h2>Мой проект</h2>
+        <p>
+          В освновном занималась мониторингом. В этом проекте ещё не писала на Python.
+          Коллеги продолжают развивать его.
+        </p>
+        <p>
+          <a class="btn btn-lg btn-primary"
+             href="https://wifi.ditgt.ru/"
+             role="button"
+             target="_blank">Сайт тут &raquo;</a>
+        </p>
+      </div>
+    </div>
+    <hr>
+  </div>
+{% endblock %}
