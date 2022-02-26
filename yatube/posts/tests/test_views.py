@@ -180,8 +180,9 @@ class PostPagesTests(TestCase):
             user=self.author,
             author=self.user
         )
-        self.author_client.get(
-            reverse('posts:profile_unfollow', kwargs={'username': self.author}))
+        self.author_client.get(reverse(
+            'posts:profile_unfollow', kwargs={'username': self.author})
+        )
         self.assertFalse(Follow.objects.filter(
             user=self.user,
             author=self.author)

@@ -127,5 +127,5 @@ class StaticURLTests(TestCase):
         """Проверка: только авторизованному пользователю доступна
         страничка подписок."""
         response = self.guest_client.get('/follow/')
-        target_url = f'/auth/login/?next=/follow/'
+        target_url = '/auth/login/?next=/follow/'
         self.assertRedirects(response, target_url)

@@ -179,4 +179,3 @@ def profile_unfollow(request, username):
         user=request.user, author=author).delete()
     # user.follower.get(author=author).delete().exists()
     return redirect('posts:profile', username=username)
-
