@@ -7,8 +7,8 @@
     {{ group.description }}
   </p>
   {% for post in page_obj %}
-  <!--Шаблон поста-->
-  {% include 'posts/includes/post_list.html' %}
+    <!--Шаблон поста-->
+    {% include 'posts/includes/post_list.html' %}
     {% if not forloop.last %}<hr>{% endif %}
   {% endfor %}
   <!-- Здесь подключён паджинатор -->

@@ -3,25 +3,24 @@
 {% block title %}Профайл пользователя {{ author }}{% endblock %}
 {% block content %}
   <div class="mb-5">
-  <h1>Все посты пользователя {{ author.get_full_name }}</h1>
-  <h3>Всего постов: {{ count_author_posts }}</h3>
-  <h4>Подписчиков: {{ followers_count }} Подписок: {{ follow_count }}</h4>
-  {% if author != request.user %}
-  {% if following %}
-    <a class="btn btn-lg btn-light" href="{% url 'posts:profile_unfollow' author.username %}" role="button">
-      Отписаться
-    </a>
-  {% else %}
-      <a class="btn btn-lg btn-primary"
-        href="{% url 'posts:profile_follow' author.username %}" role="button">
-        Подписаться
-      </a>
-   {% endif %}
+    <h1>Все посты пользователя {{ author.get_full_name }}</h1>
+    <h3>Всего постов: {{ count_author_posts }}</h3>
+    <h4>Подписчиков: {{ followers_count }} Подписок: {{ follow_count }}</h4>
+    {% if author != request.user %}
+      {% if following %}
+        <a class="btn btn-lg btn-light"
+           href="{% url 'posts:profile_unfollow' author.username %}"
+           role="button">Отписаться</a>
+      {% else %}
+        <a class="btn btn-lg btn-primary"
+           href="{% url 'posts:profile_follow' author.username %}"
+           role="button">Подписаться</a>
+      {% endif %}
     {% endif %}
   </div>
   {% for post in page_obj %}
-  <!--Шаблон поста-->
-  {% include 'posts/includes/post_list.html' %}
+    <!--Шаблон поста-->
+    {% include 'posts/includes/post_list.html' %}
     {% if post.group %}
       <a href="{% url 'posts:group_list' post.group.slug %}">все записи группы  - {{ post.group }}</a>
     {% endif %}
