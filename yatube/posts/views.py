@@ -53,8 +53,8 @@ def profile(request, username):
     follow_count = author.follower.all().count()
     followers_count = author.following.all().count()
     following = (
-            request.user.is_authenticated
-            and author.following.filter(user=request.user).exists())
+        request.user.is_authenticated
+        and author.following.filter(user=request.user).exists())
     context = {
         'author': author,
         'posts': posts,
