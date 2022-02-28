@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from ..models import Group, Post, Comment, Follow
+from ..models import Group, Post, Comment
 
 User = get_user_model()
 
@@ -92,7 +92,3 @@ class CommentModelTest(PostModelTest):
                     text_field,
                     msg='Ошибка в поле'
                 )
-
-# class FollowModelTest(PostModelTest):
-#     def test_follow_models_correct_constraints(self):
-#         constraints = Follow.
