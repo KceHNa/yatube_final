@@ -3,6 +3,7 @@ import tempfile
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.db.models.fields.files import ImageFieldFile
 from django.test import Client, TestCase, override_settings
@@ -60,6 +61,7 @@ class PostPagesTests(TestCase):
         self.authorized_client.force_login(self.user)
         self.author_client = Client()
         self.author_client.force_login(self.author)
+        cache.clear()
 
     def test_pages_uses_correct_template(self):
         """URL-адрес использует соответствующий шаблон."""
@@ -96,7 +98,6 @@ class PostPagesTests(TestCase):
             with self.subTest(reverse_name=reverse_name):
                 response = self.authorized_client.get(reverse_name)
                 first_object = response.context['page_obj'][0]
-                self.assertEqual(first_object, self.post)
                 self.assertEqual(first_object.text, self.post.text)
                 self.assertEqual(first_object.group, self.post.group)
                 self.assertEqual(first_object.author, self.post.author)
@@ -185,18 +186,25 @@ class PostPagesTests(TestCase):
         )
         self.assertFalse(Follow.objects.filter(
             user=self.user,
-            author=self.author)
+            author=self.author).exists()
         )
 
-    def test_follow_post_at_the_user(self):
-        """Корректность работы ленты избранных авторов."""
-        post = Post.objects.create(
+    def test_unfollow_post_not_in_favorites(self):
+        """Новый пост не подписке в избранном не появляется."""
+        Post.objects.create(
             author=self.author,
-            text='Текст поста в избранном',
+            text='Текст поста не в избранном',
         )
         # Проверяем, что в избранное пост не попал
         response = self.authorized_client.get('/follow/')
         self.assertEqual(len(response.context['page_obj']), 0)
+
+    def test_follow_post_in_favorites(self):
+        """Новый пост в подписке в избранном появляется."""
+        post = Post.objects.create(
+            author=self.author,
+            text='Текст поста в избранном',
+        )
         # Подписываемся на автора
         Follow.objects.create(
             author=self.author,
@@ -206,6 +214,33 @@ class PostPagesTests(TestCase):
         response = self.authorized_client.get('/follow/')
         first_object = response.context['page_obj'][0]
         self.assertEqual(first_object.text, post.text)
+
+
+class CachePagesTest(PostPagesTests):
+
+    def test_cache_html_does_not_change(self):
+        """Проверка: страница не изменяется при добавлении поста."""
+        response = self.guest_client.get('/')
+        content_old = response.content
+        # Изменяем страницу
+        Post.objects.create(
+            author=self.author,
+            text='Кекс для кэша',
+        )
+        response = self.guest_client.get('/')
+        self.assertEqual(response.content, content_old)
+
+    def test_cache_clear(self):
+        """Проверка: кэш очищается, стр. обновляется"""
+        response = self.guest_client.get('/')
+        content_old = response.content
+        Post.objects.all().delete()
+        # Можно почистить фрагментарно
+        # key = make_template_fragment_key('index_page', ['page_obj'][0])
+        # cache.delete(key)
+        cache.clear()
+        response = self.guest_client.get('/')
+        self.assertNotEqual(response.content, content_old)
 
 
 class TestPaginator(PostPagesTests):

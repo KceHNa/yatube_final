@@ -17,7 +17,7 @@ class Post(models.Model):
     objects = None
     text = models.TextField(
         'Текст поста',
-        help_text='Введите текст поста'
+        help_text='Текст нового поста'
     )
     pub_date = models.DateTimeField(
         'Дата публикации',
@@ -36,7 +36,7 @@ class Post(models.Model):
         on_delete=models.SET_NULL,
         related_name='posts',
         verbose_name='Группа',
-        help_text='Выберите группу'
+        help_text='Группа, к которой будет относиться пост'
     )
     image = models.ImageField(
         'Картинка',
@@ -68,8 +68,8 @@ class Comment(models.Model):
         verbose_name='Автор'
     )
     text = models.TextField(
-        'Текст комментария',
-        help_text='Введите текст комментария'
+        'Добавить комментарий',
+        help_text='Оставьте свой комментарий под этим постом'
     )
     created = models.DateTimeField(
         'Дата публикации',
@@ -91,3 +91,11 @@ class Follow(models.Model):
         related_name='following',
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                name='unique_follows',
+                fields=['user', 'author'],
+            ),
+        ]

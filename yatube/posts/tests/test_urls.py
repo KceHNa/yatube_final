@@ -1,7 +1,6 @@
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
-from django.core.cache import cache
 from django.test import TestCase, Client
 
 from ..models import Group, Post
@@ -104,24 +103,6 @@ class StaticURLTests(TestCase):
         response = self.authorized_client.get('/unexisting-page/')
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
         self.assertTemplateUsed(response, 'core/404.html')
-
-    def test_good_job_cache(self):
-        """Проверка: кеширование страниц html."""
-        response = self.guest_client.get('/')
-        page_obj = response.context['page_obj'][0]
-        # Изменяем страницу
-        self.post.delete()
-        Post.objects.create(
-            author=self.author,
-            text='Кекс для кэша',
-        )
-        self.assertEqual(page_obj, response.context['page_obj'][0])
-        # Можно почистить фрагментарно
-        # key = make_template_fragment_key('index_page', ['page_obj'][0])
-        # cache.delete(key)
-        cache.clear()
-        response = self.guest_client.get('/')
-        self.assertNotEqual(page_obj, response.context['page_obj'][0])
 
     def test_authorized_user_follow_page(self):
         """Проверка: только авторизованному пользователю доступна

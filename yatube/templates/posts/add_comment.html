@@ -4,16 +4,16 @@
 <!-- эта форма видна только авторизованному пользователю  -->
 {% if user.is_authenticated %}
   <div class="card my-4">
-    <h5 class="card-header">Добавить комментарий:</h5>
+    <h5 class="card-header">{{ form.text.label }}</h5>
     <div class="card-body">
       <!-- action ведет на обработчик формы  -->
       <form method="post" action="{% url 'posts:add_comment' post.id %}">
         {% csrf_token %}
         <div class="form-group mb-2">
-          <label for="{{ form.text.id_for_label }}">
-            {{ form.text.label }}
-          </label>
           {{ form.text|addclass:"form-control" }}
+          {% if form.text.help_text %}
+          <small id="{{ form.id_for_label }}-help" class="form-text text-muted">{{ form.text.help_text|safe }}</small>
+          {% endif %}
         </div>
         <button type="submit" class="btn btn-primary">Отправить</button>
       </form>
