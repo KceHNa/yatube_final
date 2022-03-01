@@ -26,7 +26,6 @@ def index(request):
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     title = 'Записи сообщества'
-    #  group = Group.objects.get(slug='group3')
     group = get_object_or_404(Group, slug=slug)
     posts = group.posts.all()
     paginator = Paginator(posts, POST_COUNT)
@@ -43,7 +42,6 @@ def group_posts(request, slug):
 
 def profile(request, username):
     template = 'posts/profile.html'
-    # author = User.objects.get(username='leo')
     author = get_object_or_404(User, username=username)
     posts = author.posts.select_related('author', 'group')
     count_author_posts = posts.count()
@@ -69,7 +67,6 @@ def profile(request, username):
 
 def post_detail(request, post_id):
     template = 'posts/post_detail.html'
-    # post = Post.objects.get(pk=2)
     post = get_object_or_404(Post, pk=post_id)
     author = post.author
     count_author_posts = author.posts.count()
@@ -136,7 +133,6 @@ def add_comment(request, post_id):
 @login_required
 def follow_index(request):
     # Страница постов "Избранные авторы"
-    # информация о текущем пользователе доступна в переменной request.user
     template = 'posts/follow.html'
     title = 'Избранные авторы'
     posts = Post.objects.filter(
@@ -170,5 +166,4 @@ def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
     Follow.objects.filter(
         user=request.user, author=author).delete()
-    # user.follower.get(author=author).delete().exists()
     return redirect('posts:profile', username=username)
